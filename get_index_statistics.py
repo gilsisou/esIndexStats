@@ -1,6 +1,14 @@
 from elasticsearch import Elasticsearch
 from elasticsearch.exceptions import NotFoundError
 from datetime import datetime
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-u')
+parser.add_argument('-p')
+args = parser.parse_args()
+user = args.u
+pwd = args.p
 
 
 def get_index_statistics(es, index_name):
@@ -15,7 +23,7 @@ def get_index_statistics(es, index_name):
     print(relevant_index_info)
 
 
-es = Elasticsearch(hosts=['localhost'], port=9200, http_auth=('elastic', 'changeme'))
+es = Elasticsearch(hosts=['localhost'], port=9200, http_auth=(user, pwd))
 index_name = "daily_news-{}".format(datetime.today().date())
 try:
     get_index_statistics(es, index_name=index_name)
